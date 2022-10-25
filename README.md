@@ -19,3 +19,5 @@ See instructions for creating your final portfolio [here](https://docs.google.co
 #### Extending My Thinking
 
 ### Growth as a Team Member
+
+This line has been added for my week 6 preview activity
