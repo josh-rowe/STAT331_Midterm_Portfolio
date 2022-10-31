@@ -1,12 +1,8 @@
-# Template for STAT 331 Portfolio
-
-See instructions for creating your final portfolio [here](https://docs.google.com/document/d/11iHZbvXWEjcpJpBQ_O5wpYlVkPfmcyQFgBFqKMlVjg4/edit?usp=sharing). This repository provides you with a template for how your portfolio repository is expected to be organized. 
+# Josh Rowe STAT 331 Midterm Portfolio
 
 # Table of Contents 
 
-## Final Grade Reflection
-
-## Essay Responses
+## Midterm Grade Reflection
 
 ## Supporting Artifacts 
 
@@ -20,4 +16,3 @@ See instructions for creating your final portfolio [here](https://docs.google.co
 
 ### Growth as a Team Member
 
-This line has been added for my week 6 preview activity
