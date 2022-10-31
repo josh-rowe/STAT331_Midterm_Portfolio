@@ -1,5 +1,5 @@
 ---
-title: "challenge2"
+title: "Challenge 2"
 author: "Josh Rowe"
 format: html
 editor: visual
