@@ -1,0 +1,36 @@
+---
+title: "Challenge 2"
+author: "Josh Rowe"
+format: html
+editor: visual
+---
+
+## Setup
+
+```{r}
+
+library(here)
+library(tidyverse)
+library(viridis)
+library(ggridges)
+
+surveys <- read_csv(here("supporting_artifacts", "continued_learning", "Data",
+                         "surveys.csv")
+                    )
+
+```
+
+## Lines 27-37
+
+```{r}
+
+ggplot(data = surveys, mapping = aes(y = species, x = weight)
+       ) + 
+  geom_boxplot(mapping = aes(fill = species), outlier.shape = 7, 
+               ) +
+  labs(x = "Weight [g]", legend = NULL) + 
+  scale_colour_viridis_d(aesthetics = "fill", option = "C") + 
+  geom_density_ridges(mapping = aes(alpha = 0.15), show.legend = FALSE)
+
+```
+

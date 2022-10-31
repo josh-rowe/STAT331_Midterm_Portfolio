@@ -1,0 +1,43 @@
+---
+title: "Data Import Practice"
+format: html
+editor: visual
+---
+
+## Line 12
+
+```{r}
+
+ages_csv <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                                "Data", "ages.csv"))
+
+```
+
+## Line 21
+
+```{r}
+
+ages_tab <- read_tsv(here::here("supporting_artifacts", "continued_learning",
+                                "Data", "ages_tab.txt"))
+
+```
+
+## Line 31
+
+```{r}
+
+ages_mystery <- read_delim(here::here("supporting_artifacts", "continued_learning",
+                                      "Data", "ages_mystery.txt"), 
+                           delim = "|")
+
+```
+
+## Line 41
+
+```{r}
+
+ages_excel <- read_excel(here::here("supporting_artifacts", "continued_learning",
+                                    "Data", "ages.xlsx"))
+
+```
+

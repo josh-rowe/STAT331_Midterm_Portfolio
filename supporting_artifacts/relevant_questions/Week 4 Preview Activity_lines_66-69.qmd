@@ -1,0 +1,51 @@
+---
+q---
+title: "Week 4 Preview"
+author: "Joshua Rowe"
+format:
+  html: 
+    code-fold: true
+editor: visual
+---
+
+## Initialize
+
+```{r}
+
+#| warning: FALSE
+#| message: FALSE
+
+library(tidyverse)
+
+
+```
+
+## Lines 66-69
+
+```{r}
+
+# Creating the datasets
+
+prof_info <- data.frame(
+  professor = 
+    c("Bodwin", "Glanz", "Carlton", "Sun", "Theobold"),
+  undergrad_school = 
+    c("Harvard", "Cal Poly", "Berkeley", "Harvard", "Colorado Mesa University"),
+  grad_school = 
+    c("UNC", "Boston University", "UCLA", "Stanford", "Montana State University")
+  )
+
+prof_course <- data.frame(
+  professor = c("Bodwin", "Glanz", "Carlton", "Theobold"),
+  Stat_331 = c(TRUE, TRUE, TRUE, TRUE),
+  Stat_330 = c(FALSE, TRUE, TRUE, FALSE),
+  Stat_431 = c(TRUE, TRUE, FALSE, TRUE)
+  )
+
+a <- right_join(prof_info, prof_course, by = "professor") ## line 66
+
+
+b <- left_join(prof_info, prof_course, by = "professor") ## line 69
+
+
+```

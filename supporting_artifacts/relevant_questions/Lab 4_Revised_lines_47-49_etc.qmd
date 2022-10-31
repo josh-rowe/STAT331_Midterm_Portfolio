@@ -1,0 +1,151 @@
+---
+title: "Lab 4 Rowe"
+author: "Joshua Rowe"
+format:
+  html:
+    code-fold: true
+editor: visual
+execute: 
+  warning: false
+  message: false
+---
+
+## Setup
+
+```{r}
+#| warning: false
+#| message: false
+
+library(tidyverse)
+
+number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
+
+avocado <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                               "Data", "avocado.csv"))
+
+```
+
+## Data Cleaning
+
+```{r Question 2}
+
+## Question 2
+
+regions <- avocado |> 
+  distinct(region)
+
+# Note: NewYork was assumed to be the city of new york because the magnitude of its "total volume" is vastly smaller than that of the state of California, a similarly sized state to New York, and is comparable in size to that of Chicago, a similarly sized city
+
+states <- data.frame(state = c("California", "SouthCarolina"))
+
+geo_regions <- data.frame(geo_region = c("GreatLakes", "Northeast",
+                                         "NorthernNewEngland", "Plains",
+                                         "SouthCentral", "Southeast", "West",
+                                         "WestTexNewMexico", "Midsouth"))
+
+total_US <- data.frame(total_us = "TotalUS")
+
+metro_areas <- avocado |> 
+  anti_join(states, by = c("region" = "state")) |> ## line 47
+  anti_join(geo_regions, by = c("region" = "geo_region")) |> 
+  anti_join(total_US, by = c("region" = "total_us")) |> 
+  rename(Small_Medium = `4046`, 
+         Large = `4225`, 
+         Extra_Large = `4770`,
+         Total_Volume = `Total Volume`)
+
+
+```
+
+```{r Question 3}
+
+## Question 3
+
+p3 <- metro_areas |> 
+  select(Small_Medium, region, year, type) |> 
+  filter(year == 2017, type == "organic") |>  ## line 64
+  slice_max(Small_Medium)
+  
+
+```
+
+3.  The metro area that sold the most small/medium organic Haas Avocados is `r p3$region[1]`.
+
+## Line 81
+
+```{r Question 4}
+
+metro_areas <- metro_areas |> 
+  separate(Date, into = c("Year", "Month", "Day")) |> 
+  mutate(Year = as.numeric(Year), ## line 76
+         Month = as.numeric(Month), 
+         Day = as.numeric(Day))
+
+p4 <- metro_areas |> 
+  select(Total_Volume, Month) |> ## line 81
+  slice_max(Total_Volume)
+
+
+```
+
+4.  The highest mean volume of avocados, over the years 2015-2018, was sold in February (month 2).
+
+## Line 100
+
+```{r Question 5}
+
+p5_regions <- metro_areas |> 
+  select(region, Total_Volume) |> 
+  semi_join(p5, by = "region") |> 
+  mutate(region = as.factor(region)) ## line 100
+
+
+```
+
+## Lines 114-117
+
+```{r Question 6}
+
+CA_regions = data.frame(region = c("LosAngeles", "SanDiego", "Sacramento",
+                                   "SanFrancisco"))
+
+p6 <- metro_areas |>  ## line 114
+  semi_join(CA_regions, by = "region") |> 
+  select(region, type, AveragePrice) |> 
+  mutate(region = as.factor(region),
+         type = as.factor(type)) |> 
+  group_by(region, type) |> 
+  summarize(AveragePrice = mean(AveragePrice)) |> 
+  pivot_wider(names_from = type, values_from = AveragePrice) |> 
+  mutate(diff_price = organic - conventional) ## line 120
+
+```
+
+## Lines 153-162
+
+```{r Question 7}
+
+p7 <- metro_areas |> 
+  select(region, type, Small_Medium, Large, Extra_Large) |> 
+  semi_join(CA_regions, by = "region") |> 
+  pivot_longer(cols = c(Small_Medium, Large, Extra_Large), 
+               names_to = "size",
+               values_to = "number") |> 
+  mutate(across(.cols = region:size, ~as.factor(.x)),
+         size = factor(size, 
+                       levels = c("Small_Medium", "Large", "Extra_Large"))) |> 
+  group_by(region, type, size) |> 
+  summarize(number = sum(number))
+
+ggplot(data = p7, mapping = aes(x = region, ## line 153
+                                y = number, 
+                                fill = size)) +
+  geom_col(position = "fill") + 
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) + 
+  facet_wrap(~type) + 
+  labs(x = "Region of CA", 
+       y = "Proportion of Mean Avocados Sold",
+       fill = "Avocado Size") + 
+  scale_fill_discrete(labels = c("Small/Medium", "Large", "Extra Large"))
+
+```

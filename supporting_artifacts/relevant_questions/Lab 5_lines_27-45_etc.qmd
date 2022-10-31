@@ -1,0 +1,62 @@
+---
+title: "Lab 5"
+author: "Josh Rowe"
+format: html
+editor: visual
+---
+
+## Setup
+
+```{r setup}
+#| warning: false
+#| message: false
+
+library(here)
+library(tidyverse)
+library(viridis)
+
+```
+
+## Lines 27-45
+
+```{r}
+#| warning: false
+#| message: false
+
+
+surveys <- read_csv(here("supporting_artifacts", ## line 27
+                         "continued_learning", "Data", "surveys.csv"))
+
+
+surveys <- surveys |> 
+  mutate(species = as.factor(species))
+
+
+ggplot(data = surveys, mapping = aes(y = fct_reorder(.f = species, 
+                                                     .x = weight,
+                                                     .fun = median),
+                                     x = weight)) + 
+  geom_jitter(color = 'tomato', alpha = 0.05) +
+  geom_boxplot(outlier.shape = NA) + 
+  labs(x = "Weight [g]", 
+       y = NULL, 
+       title = "Species", 
+       title.position = "plot",
+       legend = NULL) + 
+  theme(plot.title.position = "plot")
+
+
+```
+## Lines 109-110
+
+```{r}
+#| warning: false
+#| message: false
+
+captures <- surveys |> 
+  mutate(day_of_week = as.factor(day_of_week)) |> ## line 109
+  group_by(day_of_week) |> 
+  summarize(captures = n()) |> 
+  filter(is.na(day_of_week) == FALSE)
+
+```
