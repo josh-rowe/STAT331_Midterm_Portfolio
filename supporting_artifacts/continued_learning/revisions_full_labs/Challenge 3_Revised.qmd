@@ -18,7 +18,7 @@ editor: visual
 library(tidyverse)
 
 hiphop <- read_csv(here::here("supporting_artifacts", "continued_learning",
-                              "revisions", "Data", "hiphop.csv"))
+                              "Data", "hiphop.csv"))
 
 number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
 
