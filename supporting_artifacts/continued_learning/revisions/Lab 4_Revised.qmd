@@ -44,6 +44,21 @@ geo_regions <- data.frame(geo_region = c("GreatLakes", "Northeast", "NorthernNew
 
 total_US <- data.frame(total_us = "TotalUS")
 
+# Old code:
+# metro_areas <- avocado |> 
+#   anti_join(states, by = c("region" = "state"))
+# 
+# metro_areas <- metro_areas |> 
+#   anti_join(geo_regions, by = c("region" = "geo_region"))
+# 
+# metro_areas <- metro_areas |> 
+#   anti_join(total_US, by = c("region" = "total_us")) |> 
+#   rename(Small_Medium = `4046`, 
+#          Large = `4225`, 
+#          Extra_Large = `4770`,
+#          Total_Volume = `Total Volume`)
+
+# Updated code:
 metro_areas <- avocado |> 
   anti_join(states, by = c("region" = "state")) |> 
   anti_join(geo_regions, by = c("region" = "geo_region")) |> 
@@ -60,6 +75,22 @@ metro_areas <- avocado |>
 
 ## Question 3
 
+# Old code:
+# p3_filter <- data.frame(year = 2017, type = "organic")
+# 
+# p3 <- metro_areas |> 
+#   select(Small_Medium, region, year, type) |> 
+#   semi_join(p3_filter, by = "year") |> 
+#   semi_join(p3_filter, by = "type") |> 
+#   group_by(region) |> 
+#   summarize(Small_Medium = max(Small_Medium))
+# 
+# p3_max <- data.frame(Small_Medium = max(p3$Small_Medium))
+# 
+# p3 <- p3 |> 
+#   semi_join(p3_max, by = "Small_Medium")
+
+# Updated code:
 p3 <- metro_areas |> 
   select(Small_Medium, region, year, type) |> 
   filter(year == 2017, type == "organic") |> 
@@ -110,6 +141,16 @@ ggplot(data = p5_regions, mapping = aes(x = region, y = Total_Volume)) +
 
 CA_regions = data.frame(region = c("LosAngeles", "SanDiego", "Sacramento", "SanFrancisco"))
 
+# Old code:
+# p6 <- metro_areas |> 
+#   semi_join(CA_regions, by = "region") |> 
+#   select(region, type, AveragePrice) |> 
+#   mutate(region = as.factor(region),
+#          type = as.factor(type)) |> 
+#   group_by(region, type) |> 
+#   summarize(AveragePrice = mean(AveragePrice))
+
+# Updated code:
 p6 <- metro_areas |> 
   semi_join(CA_regions, by = "region") |> 
   select(region, type, AveragePrice) |> 
