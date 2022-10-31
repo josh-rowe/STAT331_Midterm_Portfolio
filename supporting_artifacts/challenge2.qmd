@@ -1,0 +1,63 @@
+---
+title: "challenge2"
+author: "Josh Rowe"
+format: html
+editor: visual
+---
+
+## Setup
+
+```{r}
+
+library(here)
+library(tidyverse)
+library(viridis)
+library(ggridges)
+
+surveys <- read_csv(here("supporting_artifacts", "continued_learning", "revisions",
+                         "Data", "surveys.csv")
+                    )
+
+```
+
+## Ridge Plots
+
+```{r}
+
+ggplot(data = surveys, mapping = aes(y = species, x = weight)
+       ) + 
+  geom_boxplot(mapping = aes(fill = species), outlier.shape = 7, 
+               ) +
+  labs(x = "Weight [g]", legend = NULL) + 
+  scale_colour_viridis_d(aesthetics = "fill", option = "C") + 
+  geom_density_ridges(mapping = aes(alpha = 0.15), show.legend = FALSE)
+
+```
+
+## Exploring Annotation
+
+```{r}
+
+ggplot(data = surveys, mapping = aes(y = species, x = weight)
+       ) + 
+  geom_boxplot(mapping = aes(fill = genus), show.legend = FALSE 
+               ) +
+  labs(x = "Weight [g]", legend = NULL) + 
+  scale_colour_viridis_d(aesthetics = "fill", option = "H") + 
+  geom_density_ridges(mapping = aes(alpha = 0.25), show.legend = FALSE) + 
+  annotate("text", y = 1.4, x = 215, label = "Neotoma") + 
+  annotate("text", y = 2.4, x = 75, label = "Chaetodipus") + 
+  annotate("text", y = 3.4, x = 65, label = "Peromyscus") + 
+  annotate("text", y = 4.4, x = 50, label = "Chaetodipus") + 
+  annotate("text", y = 5.4, x = 70, label = "Reithrodontomys") + 
+  annotate("text", y = 6.4, x = 125, label = "Sigmodon") + 
+  annotate("text", y = 7.4, x = 75, label = "Onychomys") + 
+  annotate("text", y = 8.4, x = 65, label = "Peromyscus") + 
+  annotate("text", y = 9.4, x = 65, label = "Reithrodontomys") + 
+  annotate("text", y = 10.4, x = 85, label = "Dipodomys") + 
+  annotate("text", y = 11.4, x = 90, label = "Dipodomys") + 
+  annotate("text", y = 12.4, x = 60, label = "Chaetodipus") + 
+  annotate("text", y = 13.4, x = 180, label = "Dipodomys") + 
+  annotate("text", y = 14.4, x = 65, label = "Onychomys")
+
+```

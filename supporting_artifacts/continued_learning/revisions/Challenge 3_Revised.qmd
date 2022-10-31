@@ -1,0 +1,77 @@
+---
+title: "Challenge 3"
+author: "Joshua Rowe"
+format:
+    html:
+      code-fold: TRUE
+      toc: TRUE
+      toc-depth: 2
+editor: visual
+---
+
+## Initialization
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+hiphop <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                              "revisions", "Data", "hiphop.csv"))
+
+number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
+
+```
+
+## Non-Published Comparisons
+
+```{r Workflow Code}
+
+# Original code:
+# clean_data <- survey_data |> 
+#  select(subj, sex, ethnic, intl, vocal, classical, folk, rock, 
+#         country, pop, alternative, hiphop, unclassifiable)
+
+# Updated code:
+hiphop_clean <- hiphop |> 
+  select(subj:unclassifiable)
+
+# Original code:
+# male_female <- clean_data |> 
+#   distinct(subj, .keep_all = TRUE) |> 
+#   group_by(sex) |> 
+#   summarize(mean_intl = mean(intl), mean_vocal = mean(vocal), 
+#             mean_classical = mean(classical), mean_folk = mean(folk),
+#             mean_rock = mean(rock), mean_country = mean(country),
+#             mean_pop = mean(pop), mean_alt = mean(alternative),
+#             mean_hiphop = mean(hiphop), mean_unclass = mean(unclassifiable)) |> 
+#   mutate(across(mean_intl:mean_unclass, list(diff)))
+
+# Updated code:
+male_female <- hiphop_clean |> 
+  distinct(subj, .keep_all = TRUE) |> 
+  group_by(sex) |> 
+  summarize(across(.cols = intl:unclassifiable, .fns = mean)) |> 
+  summarize(across(.cols = intl:unclassifiable, .fns = diff))
+
+
+nonwhite_white <- hiphop_clean |> 
+  distinct(subj, .keep_all = TRUE) |> 
+  mutate(ethnic_binary = as.factor(
+    if_else(ethnic == "white", "white", "non-white")
+  )) |> 
+  group_by(ethnic_binary) |> 
+  summarize(across(.cols = intl:unclassifiable, .fns = mean)) |> 
+  summarize(across(.cols = intl:unclassifiable, .fns = diff))
+
+
+```
+
+Using the summarize() function above, each genre variable was converted into a summary statistic which shows the difference between the mean number of artists in that genre that were listed by each group. Exploring these differences, it can be seen that the genre that most separated female and male participants was *rock*. The genre that most separated non-white and white participants was *international*.
+
+## Study Design Critique
+
+A major concern with any study is whether or not the sample can be generalized enough to warrant comparisons to a greater population. The first concern that I had when reading over this study's design was the sampling method - I am not sure whether liberal arts students at a university would be able to represent a more diverse population.
+
+The second concern that I had with this study is more focused on its social context. Even in 2011, when the article was published, I'm not sure whether "African American English" (AAE) was far enough out of the mainstream to warrant the assumption that a person would not recognize AAE terms if they were not of African-American descent. AAE terms have been co-opted by non-black performers for over half a century (a fact which I learned about from this well-done PBS short! <https://www.youtube.com/watch?v=8mXaccYFKRQ>), and basing a study on the fact that non-black participants are "unlikely" to know AAE terms without listening to hiphop performers ignores this historical context.

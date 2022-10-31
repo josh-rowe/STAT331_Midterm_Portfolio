@@ -1,0 +1,174 @@
+---
+title: "Lab 3"
+author: "Josh Rowe"
+format: 
+  html:
+    code-fold: TRUE
+    toc: TRUE
+    toc-depth: 2
+editor: visual
+---
+
+## Initialization
+
+```{r}
+#| message: FALSE
+#| warning: FALSE
+
+library(tidyverse)
+
+# Original code:
+# survey_data = read_csv(here::here("Lab Assignments", 
+#                                   "Lab 3", "hiphop.csv"))
+
+# Revised code:
+hiphop = read_csv(here::here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "hiphop.csv"))
+
+number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
+
+```
+
+## Assignment
+
+1.  The dataset is the result of a linguistic study performed at the University of Minnesota. It contains 64 African American English (AAE) terms which 168 participants were required to define for the study, as well as other information about the participants which are paired to their definitions. The participants were undergraduate students enrolled in University of Minnesota linguistics, sociology, and music classes. The data is a tibble that contains 10,752 rows of 38 different variables (38 columns). Participants' music preferences are listed with the double datatype, and participants' sex, ethnicity, and pseudonyms are listed as character vectors. The participants' definitions of the AE terms were coded using a 1-5 Likert scale based on their correctness.
+
+<!-- -->
+
+2.  Each row of this dataset is a term from the study along with one participants' response to that word and their associated meta data. Since there were 168 participants and 64 vocabulary words in the study, there are 168 \* 64 = 10,752 rows.
+
+3.  Missing values were replaced with the mean value from the given question. The major benefit of this is that participants who are missing data can still be used in the dataset without causing issues when performing analysis. According to the article *Multiple imputation: dealing with missing data* published in the journal **Nephrology Dialysis Transplantation**, some of the drawbacks of replacing missing values with the mean is that this can lead to biased standard errors and estimates of the population mean.
+
+```{r P4}
+
+# Original code:
+# survey_data <- survey_data |> 
+#   mutate(sex = as.factor(sex), 
+#          ethnic = as.factor(ethnic),
+#          word = as.factor(word),
+#          age_bins = as.factor(if_else(age < 20, "<20", 
+#                                       if_else(age < 25, "20-25", "25+"))
+#                               )
+#          )
+
+# Updated code:
+hiphop <- hiphop |> 
+  mutate(across(.cols = c(sex, ethnic, word), .fns = as.factor),
+         age_bins = as.factor(case_when(age < 20 ~ "<20",
+                                        age <= 25 ~ "20-25",
+                                        age > 25 ~ "25+")))
+
+```
+
+4.  See above. Note that NA values were not dropped because they only appeared in the columns of the dataset which were not used for calculations in this lab.
+
+```{r P5}
+
+# Original code:
+# P5_num_terms <- length(levels(survey_data$word))
+
+# Updated code:
+P5_num_terms <- hiphop |> 
+  summarize(words = n_distinct(word))
+
+```
+
+5.  Using the code above, it can be seen that there are `r P5_num_terms$words[1]` unique AAE words in the dataset.
+
+```{r P6}
+
+hiphop <- hiphop |> 
+  mutate(ethnic_binary = as.factor(
+          if_else(ethnic == "white", "white", "non-white")))
+
+```
+
+6.  See code above.
+
+```{r P7}
+
+P7_demographics <- hiphop |> 
+  distinct(subj, .keep_all = TRUE) |> 
+  select(sex, age, ethnic_binary) |> 
+  summary(digits = 2)
+
+P7_demographics
+
+```
+
+7.  The study consisted of 168 participants, 117 (`r number(117 / 168 * 100)`%) of whom were female and 51 (`r number(51 / 168 * 100)`%) of whom were male. The mean age of participants was 20 years, with a median of 19, a minimum of 16, and a maximum of 48 years. 135 (`r number(135 / 168 * 100)`%) of the participants identified as white, while 33 (`r number(33 / 168 * 100)`%) did not identify as white.
+
+```{r P8}
+
+P8_demographics <- hiphop |> 
+  distinct(subj, .keep_all = TRUE) |> 
+  select(subj:ethnic, age_bins, ethnic_binary)
+
+ggplot(data = P8_demographics, mapping = aes(y = age, x = sex),
+       ) + 
+  geom_boxplot(mapping = aes(fill = sex), outlier.shape = 2, show.legend = FALSE
+               ) +
+  labs(title = "Data Representation 1: Boxplots",
+       x = "Biological Sex", y = "Age [yrs]", legend = NULL) + 
+  facet_wrap(~ ethnic_binary)
+
+ggplot(data = P8_demographics) + 
+  geom_bar(mapping = aes(y = ethnic, fill = age_bins)) +
+  labs(title = "Data Representation 2: Bar Plots",
+       x = "Number of Participants", y = "Ethnicity", legend = NULL,
+       fill = "Age Range") + 
+  facet_wrap(~ sex)
+
+```
+
+## Familiar Words
+
+```{r Familiar Words}
+
+hiphop_a <- hiphop |> 
+  select(word, age, familiarity) |> 
+  filter(age < 20) |> 
+  group_by(word) |> 
+  summarize(mean_score = mean(familiarity)) |>
+  slice_max(mean_score)
+
+hiphop_b <- hiphop |> 
+  select(word, sex, ethnic_binary, familiarity) |> 
+  filter(sex == "Female", ethnic_binary == "non-white") |> 
+  group_by(word) |> 
+  summarize(mean_score = mean(familiarity)) |>
+  slice_max(mean_score)
+
+hiphop_c <- hiphop |> 
+  select(word, sex, ethnic_binary, age, familiarity) |> 
+  filter(age > 30, sex == "Male", ethnic_binary == "white") |> 
+  group_by(word) |> 
+  summarize(mean_score = mean(familiarity)) |>
+  slice_max(mean_score)
+
+```
+
+a.  The most familiar word to participants under the age of 20 was "`r hiphop_a$word`" with a mean score of `r number(hiphop_a$mean_score)`.
+
+b.  For non-white female participants, the most familiar word was "`r hiphop_b$word`" with a mean score of `r number(hiphop_b$mean_score)`.
+
+c.  The most familiar word to white male participants above the age of 30 was "`r hiphop_c$word`," which had a mean score of `r number(hiphop_c$mean_score)`.
+
+## Justin Bieber
+
+If justin Bieber were a participant in this study, he would have been classified as a white male who was 17-23 years old, from a town with 10,000 to 60,000 people, and *would presumably have received the highest "bieber" score* of people matching his characteristics since he would know his own songs. The code below determines which participant, if any, *could* have been Justin Bieber.
+
+```{r Justin Bieber}
+
+Justin_Bieber <- hiphop |> 
+  select(subj, age, sex, ethnic, city, bieber) |> 
+  filter(age >= 17, age <= 23,
+         city >= 10000, city <= 60000,
+         sex == "Male",
+         ethnic == "white") |> 
+  distinct(subj, .keep_all = TRUE) |> 
+  slice_max(bieber)
+
+```
+
+Using the criteria above, which are implemented using code (also above), the subject who most likely could have been Justin Bieber is **`r Justin_Bieber$subj`**!
