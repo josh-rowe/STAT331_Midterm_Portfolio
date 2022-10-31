@@ -9,7 +9,8 @@ editor: visual
 ```{r}
 # Code to read in the ages.csv data goes here! 
 
-ages_csv <- read_csv(here::here("Practice Activities", "Week 2", "Ages_Data", "ages.csv"))
+ages_csv <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "ages.csv"))
 
 ```
 
@@ -18,7 +19,8 @@ ages_csv <- read_csv(here::here("Practice Activities", "Week 2", "Ages_Data", "a
 ```{r}
 # Code to read in the ages_tab.txt data goes here! 
 
-ages_tab <- read_tsv(here::here("Practice Activities", "Week 2", "Ages_Data", "ages_tab.txt"))
+ages_tab <- read_tsv(here::here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "ages_tab.txt"))
 
 
 ```
@@ -28,7 +30,9 @@ ages_tab <- read_tsv(here::here("Practice Activities", "Week 2", "Ages_Data", "a
 ```{r}
 # Code to read in the ages_mystery.txt data goes here! 
 
-ages_mystery <- read_delim(here::here("Practice Activities", "Week 2", "Ages_Data", "ages_mystery.txt"), delim = "|")
+ages_mystery <- read_delim(here::here("supporting_artifacts", "continued_learning",
+                                      "revisions", "Data", "ages_mystery.txt"), 
+                           delim = "|")
 
 
 ```
@@ -38,7 +42,8 @@ ages_mystery <- read_delim(here::here("Practice Activities", "Week 2", "Ages_Dat
 ```{r}
 # Code to read in the ages.xlsx data goes here! 
 
-ages_excel <- read_excel(here::here("Practice Activities", "Week 2", "Ages_Data", "ages.xlsx"))
+ages_excel <- read_excel(here::here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "ages.xlsx"))
 
 ```
 
@@ -49,10 +54,11 @@ ages_excel <- read_excel(here::here("Practice Activities", "Week 2", "Ages_Data"
 ```{r}
 # Code to read in the ages.csv with "Name" as a factor and "Age" as a character goes here! 
 
-ages_factors <- read_csv(here::here("Practice Activities", "Week 2", "Ages_Data", "ages.csv"), col_types = cols(
-  Name = col_factor(),
-  Age = col_character()
-))
+ages_factors <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "ages.csv"), 
+                         col_types = cols(Name = col_factor(),
+                                          Age = col_character())
+                         )
 
 
 ```

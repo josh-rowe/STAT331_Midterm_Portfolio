@@ -20,7 +20,8 @@ library(tidyverse)
 
 number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
 
-avocado <- read_csv(here::here("Lab Assignments", "Lab 4", "avocado.csv"))
+avocado <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "avocado.csv"))
 
 ```
 
@@ -107,7 +108,8 @@ ggplot(data = p5_regions, mapping = aes(x = region, y = Total_Volume)) +
 
 ```{r Question 6}
 
-CA_regions = data.frame(region = c("LosAngeles", "SanDiego", "Sacramento", "SanFrancisco"))
+CA_regions = data.frame(region = c("LosAngeles", "SanDiego", "Sacramento",
+                                   "SanFrancisco"))
 
 p6 <- metro_areas |> 
   semi_join(CA_regions, by = "region") |> 

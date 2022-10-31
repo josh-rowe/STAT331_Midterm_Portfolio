@@ -24,7 +24,8 @@ library(tidyverse)
 
 ```{r}
 
-cereals_data <- read_csv(here::here("Practice Activities", "Week 4", "cereal.csv"))
+cereals_data <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "cereal.csv"))
 
 cereals_long <- cereals_data |> 
   pivot_longer(c(protein, fat, fiber), 

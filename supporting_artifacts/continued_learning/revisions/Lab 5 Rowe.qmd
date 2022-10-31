@@ -24,7 +24,8 @@ library(viridis)
 #| message: false
 
 
-surveys <- read_csv(here("Lab Assignments", "Lab 2", "surveys.csv"))
+surveys <- read_csv(here("supporting_artifacts", "continued_learning",
+                                "revisions", "Data", "surveys.csv"))
 
 
 surveys <- surveys |> 
