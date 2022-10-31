@@ -2,17 +2,33 @@
 
 # Table of Contents 
 
-## Midterm Grade Reflection
+## Midterm_Grade_Reflection
 
-## Supporting Artifacts 
+## supporting_artifacts 
 
-### Demonstration of Learning Targets
+  Lab 4_Revised.qmd
+  Lab 5 Rowe.qmd
+  Week 4 Preview Activity.qmd
+  challenge2.qmd
+  data_import_practice.qmd
 
-### Demonstration of Continued Learning
+### condinued_learning
 
-#### Revising My Thinking
+#### revisions
 
-#### Extending My Thinking
+  Challenge 3_Revised.qmd
+  Lab 3_Revised.qmd
+  Lab 4_Revised.qmd
+  Lab1_Challenge_Revised.qmd
 
-### Growth as a Team Member
+##### Data
+  
+  ages.csv
+  ages.xlsx
+  ages_mystery.txt
+  ages_tab.txt
+  avocado.csv
+  cereal.csv
+  hiphop.csv
+  surveys.csv
 
