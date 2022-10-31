@@ -1,0 +1,141 @@
+---
+title: "Lab 4 Rowe"
+author: "Joshua Rowe"
+format:
+  html:
+    code-fold: true
+editor: visual
+execute: 
+  warning: false
+  message: false
+---
+
+## Setup
+
+```{r}
+#| warning: false
+#| message: false
+
+library(tidyverse)
+
+number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
+
+avocado <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                               "Data", "avocado.csv"))
+```
+
+## Data Cleaning
+
+```{r Question 2}
+
+## Question 2
+
+regions <- avocado |> 
+  distinct(region)
+
+# Note: NewYork was assumed to be the city of new york because the magnitude of its "total volume" is vastly smaller than that of the state of California, a similarly sized state to New York, and is comparable in size to that of Chicago, a similarly sized city
+
+states <- data.frame(state = c("California", "SouthCarolina"))
+
+geo_regions <- data.frame(geo_region = c("GreatLakes", "Northeast",
+                                         "NorthernNewEngland", "Plains",
+                                         "SouthCentral", "Southeast", "West",
+                                         "WestTexNewMexico", "Midsouth"))
+
+total_US <- data.frame(total_us = "TotalUS")
+
+# Old code:
+# metro_areas <- avocado |> 
+#   anti_join(states, by = c("region" = "state"))
+# 
+# metro_areas <- metro_areas |> 
+#   anti_join(geo_regions, by = c("region" = "geo_region"))
+# 
+# metro_areas <- metro_areas |> 
+#   anti_join(total_US, by = c("region" = "total_us")) |> 
+#   rename(Small_Medium = `4046`, 
+#          Large = `4225`, 
+#          Extra_Large = `4770`,
+#          Total_Volume = `Total Volume`)
+
+# Updated code:
+metro_areas <- avocado |> 
+  anti_join(states, by = c("region" = "state")) |> 
+  anti_join(geo_regions, by = c("region" = "geo_region")) |> 
+  anti_join(total_US, by = c("region" = "total_us")) |> 
+  rename(Small_Medium = `4046`, 
+         Large = `4225`, 
+         Extra_Large = `4770`,
+         Total_Volume = `Total Volume`)
+
+
+```
+
+```{r Question 3}
+
+## Question 3
+
+# Old code:
+# p3_filter <- data.frame(year = 2017, type = "organic")
+# 
+# p3 <- metro_areas |> 
+#   select(Small_Medium, region, year, type) |> 
+#   semi_join(p3_filter, by = "year") |> 
+#   semi_join(p3_filter, by = "type") |> 
+#   group_by(region) |> 
+#   summarize(Small_Medium = max(Small_Medium))
+# 
+# p3_max <- data.frame(Small_Medium = max(p3$Small_Medium))
+# 
+# p3 <- p3 |> 
+#   semi_join(p3_max, by = "Small_Medium")
+
+# Updated code:
+p3 <- metro_areas |> 
+  select(Small_Medium, region, year, type) |> 
+  filter(year == 2017, type == "organic") |> 
+  slice_max(Small_Medium)
+  
+
+```
+
+3.  The metro area that sold the most small/medium organic Haas Avocados is `r p3$region[1]`.
+
+```{r Question 6}
+
+CA_regions = data.frame(region = c("LosAngeles", "SanDiego", "Sacramento",
+                                   "SanFrancisco"))
+
+# Old code:
+# p6 <- metro_areas |> 
+#   semi_join(CA_regions, by = "region") |> 
+#   select(region, type, AveragePrice) |> 
+#   mutate(region = as.factor(region),
+#          type = as.factor(type)) |> 
+#   group_by(region, type) |> 
+#   summarize(AveragePrice = mean(AveragePrice))
+
+# Updated code:
+p6 <- metro_areas |> 
+  semi_join(CA_regions, by = "region") |> 
+  select(region, type, AveragePrice) |> 
+  mutate(region = as.factor(region),
+         type = as.factor(type)) |> 
+  group_by(region, type) |> 
+  summarize(AveragePrice = mean(AveragePrice)) |> 
+  pivot_wider(names_from = type, values_from = AveragePrice) |> 
+  mutate(diff_price = organic - conventional)
+
+
+ggplot(data = p6) + 
+  geom_point(mapping = aes(x = conventional, 
+                           y = diff_price,
+                           color = region)) + 
+  labs(x = "Price of Conventional Avocados [$]", 
+       y = "Conventional/Organic Price Diff [$]", 
+       color = "Region")
+
+
+```
+
+The largest difference in organic vs. non-organic avocado prices is seen in the San Francisco region, which has an average price of \$`r number(p6$organic[4])` for organic avocados and \$`r number(p6$conventional[4])` for non-organic avocados (difference of \$`r number(p6$diff_price[4])`). The second largest difference in prices is found in the Sacramento region with an average organic price of \$`r number(p6$organic[2])` and an average non-organic price of \$`r number(p6$conventional[2])` (difference of \$`r number(p6$diff_price[2])`).

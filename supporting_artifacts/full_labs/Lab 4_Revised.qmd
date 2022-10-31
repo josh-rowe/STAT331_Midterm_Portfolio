@@ -21,7 +21,7 @@ library(tidyverse)
 number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
 
 avocado <- read_csv(here::here("supporting_artifacts", "continued_learning",
-                                "revisions", "Data", "avocado.csv"))
+                               "Data", "avocado.csv"))
 
 ```
 
@@ -40,7 +40,10 @@ regions <- avocado |>
 
 states <- data.frame(state = c("California", "SouthCarolina"))
 
-geo_regions <- data.frame(geo_region = c("GreatLakes", "Northeast", "NorthernNewEngland", "Plains", "SouthCentral", "Southeast", "West", "WestTexNewMexico", "Midsouth"))
+geo_regions <- data.frame(geo_region = c("GreatLakes", "Northeast",
+                                         "NorthernNewEngland", "Plains",
+                                         "SouthCentral", "Southeast", "West",
+                                         "WestTexNewMexico", "Midsouth"))
 
 total_US <- data.frame(total_us = "TotalUS")
 

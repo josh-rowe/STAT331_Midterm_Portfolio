@@ -1,0 +1,41 @@
+---
+title: "Lab 1"
+author: "Joshua Rowe"
+format:
+  html:
+    code-fold: true
+    toc: true
+    toc-title: "This is an example of a Table of Contents"
+    toc-location: "body"
+    editor: visual
+execute: 
+  echo: true
+  error: true
+---
+
+# Cars Dataset
+
+```{r}
+
+summary(cars)
+
+```
+
+This dataset contains information about speed and stopping distance of cars. The data was collected in the 1920's. It has 50 rows and two variables.
+
+# Plot of Pressure Dataset
+
+```{r}
+#| fig-align: "center"
+ 
+# Initial Code:
+# plot(pressure, xlab = "Temperature [\u00B0C]", ylab = "Pressure [mmHg]")
+# title(main = "Vapor Pressure of Mercury as a Function of Temperature")
+
+# Revised Code:
+plot(pressure, xlab = "Temperature [\u00B0C]", ylab = "Pressure [mmHg]")
+title(main = "Vapor Pressure of Mercury as a Function of Temperature", sub = "Figure 1-1")
+
+```
+
+Note: The code-chunk option `#| fig-align: "center"` was used to specify that the above plot would be center-aligned.

@@ -1,0 +1,68 @@
+---
+title: "Lab 3"
+author: "Josh Rowe"
+format: 
+  html:
+    code-fold: TRUE
+    toc: TRUE
+    toc-depth: 2
+editor: visual
+---
+
+## Initialization
+
+```{r}
+#| message: FALSE
+#| warning: FALSE
+
+library(tidyverse)
+
+# Original code:
+# survey_data = read_csv(here::here("Lab Assignments", 
+#                                   "Lab 3", "hiphop.csv"))
+
+# Revised code:
+hiphop = read_csv(here::here("supporting_artifacts", "continued_learning",
+                             "Data", "hiphop.csv"))
+
+number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
+
+```
+
+## Questions 4 and 5
+
+```{r P4}
+
+# Original code:
+# survey_data <- survey_data |> 
+#   mutate(sex = as.factor(sex), 
+#          ethnic = as.factor(ethnic),
+#          word = as.factor(word),
+#          age_bins = as.factor(if_else(age < 20, "<20", 
+#                                       if_else(age < 25, "20-25", "25+"))
+#                               )
+#          )
+
+# Updated code:
+hiphop <- hiphop |> 
+  mutate(across(.cols = c(sex, ethnic, word), .fns = as.factor),
+         age_bins = as.factor(case_when(age < 20 ~ "<20",
+                                        age <= 25 ~ "20-25",
+                                        age > 25 ~ "25+")))
+
+```
+
+4.  See above. Note that NA values were not dropped because they only appeared in the columns of the dataset which were not used for calculations in this lab.
+
+```{r P5}
+
+# Original code:
+# P5_num_terms <- length(levels(survey_data$word))
+
+# Updated code:
+P5_num_terms <- hiphop |> 
+  summarize(words = n_distinct(word))
+
+```
+
+5.  Using the code above, it can be seen that there are `r P5_num_terms$words[1]` unique AAE words in the dataset.

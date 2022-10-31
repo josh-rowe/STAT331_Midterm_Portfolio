@@ -14,8 +14,8 @@ library(tidyverse)
 library(viridis)
 library(ggridges)
 
-surveys <- read_csv(here("supporting_artifacts", "continued_learning", "revisions",
-                         "Data", "surveys.csv")
+surveys <- read_csv(here("supporting_artifacts", "continued_learning", "Data",
+                         "surveys.csv")
                     )
 
 ```

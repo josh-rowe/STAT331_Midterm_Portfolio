@@ -10,7 +10,7 @@ editor: visual
 # Code to read in the ages.csv data goes here! 
 
 ages_csv <- read_csv(here::here("supporting_artifacts", "continued_learning",
-                                "revisions", "Data", "ages.csv"))
+                                "Data", "ages.csv"))
 
 ```
 
@@ -20,7 +20,7 @@ ages_csv <- read_csv(here::here("supporting_artifacts", "continued_learning",
 # Code to read in the ages_tab.txt data goes here! 
 
 ages_tab <- read_tsv(here::here("supporting_artifacts", "continued_learning",
-                                "revisions", "Data", "ages_tab.txt"))
+                                "Data", "ages_tab.txt"))
 
 
 ```
@@ -31,7 +31,7 @@ ages_tab <- read_tsv(here::here("supporting_artifacts", "continued_learning",
 # Code to read in the ages_mystery.txt data goes here! 
 
 ages_mystery <- read_delim(here::here("supporting_artifacts", "continued_learning",
-                                      "revisions", "Data", "ages_mystery.txt"), 
+                                      "Data", "ages_mystery.txt"), 
                            delim = "|")
 
 
@@ -43,7 +43,7 @@ ages_mystery <- read_delim(here::here("supporting_artifacts", "continued_learnin
 # Code to read in the ages.xlsx data goes here! 
 
 ages_excel <- read_excel(here::here("supporting_artifacts", "continued_learning",
-                                "revisions", "Data", "ages.xlsx"))
+                                    "Data", "ages.xlsx"))
 
 ```
 
@@ -55,7 +55,7 @@ ages_excel <- read_excel(here::here("supporting_artifacts", "continued_learning"
 # Code to read in the ages.csv with "Name" as a factor and "Age" as a character goes here! 
 
 ages_factors <- read_csv(here::here("supporting_artifacts", "continued_learning",
-                                "revisions", "Data", "ages.csv"), 
+                                    "Data", "ages.csv"), 
                          col_types = cols(Name = col_factor(),
                                           Age = col_character())
                          )

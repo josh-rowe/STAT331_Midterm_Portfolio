@@ -1,0 +1,59 @@
+---
+title: "Challenge 3"
+author: "Joshua Rowe"
+format:
+    html:
+      code-fold: TRUE
+      toc: TRUE
+      toc-depth: 2
+editor: visual
+---
+
+## Initialization
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+hiphop <- read_csv(here::here("supporting_artifacts", "continued_learning",
+                              "Data", "hiphop.csv"))
+
+number <- function(x) format(x, scientific = FALSE, big.mark = ",", digits = 3)
+
+```
+
+## Non-Published Comparisons
+
+```{r Workflow Code}
+
+# Original code:
+# clean_data <- survey_data |> 
+#  select(subj, sex, ethnic, intl, vocal, classical, folk, rock, 
+#         country, pop, alternative, hiphop, unclassifiable)
+
+# Updated code:
+hiphop_clean <- hiphop |> 
+  select(subj:unclassifiable)
+
+# Original code:
+# male_female <- clean_data |> 
+#   distinct(subj, .keep_all = TRUE) |> 
+#   group_by(sex) |> 
+#   summarize(mean_intl = mean(intl), mean_vocal = mean(vocal), 
+#             mean_classical = mean(classical), mean_folk = mean(folk),
+#             mean_rock = mean(rock), mean_country = mean(country),
+#             mean_pop = mean(pop), mean_alt = mean(alternative),
+#             mean_hiphop = mean(hiphop), mean_unclass = mean(unclassifiable)) |> 
+#   mutate(across(mean_intl:mean_unclass, list(diff)))
+
+# Updated code:
+male_female <- hiphop_clean |> 
+  distinct(subj, .keep_all = TRUE) |> 
+  group_by(sex) |> 
+  summarize(across(.cols = intl:unclassifiable, .fns = mean)) |> 
+  summarize(across(.cols = intl:unclassifiable, .fns = diff))
+
+
+```
